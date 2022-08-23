@@ -19,9 +19,6 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: /tmp
     env: 
       RUNNER_TOOL_CACHE: /tmp
 #     container:
@@ -34,11 +31,10 @@ jobs:
 
       # Runs a single command using the runners shell
       
-#       - name: choose Python
-#         uses: actions/setup-python@v3
-#         with:
-#           python-version: 3.9
-#           cache: 'pip'
+      - name: choose Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
       - name: Run a one-line script
         run: |
           env
