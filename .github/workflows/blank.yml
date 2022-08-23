@@ -41,6 +41,7 @@ jobs:
       - name: Run a one-line script
         run: |
           whoami
+          python --version
           sudo apt update -y
           sudo apt install ninja-build
           sudo apt-get install python-pip 
