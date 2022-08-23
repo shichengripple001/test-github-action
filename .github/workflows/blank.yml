@@ -42,6 +42,7 @@ jobs:
           whoami
           sudo apt update -y
           sudo apt install ninja-build
+          python --version
           sudo pip install --upgrade pip
 
       # Runs a set of commands using the runners shell
