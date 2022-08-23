@@ -36,6 +36,7 @@ jobs:
 #           cache: 'pip'
       - name: Run a one-line script
         run: |
+          echo "${{ runner.tool_cache }}"
           mkdir /__w
           whoami
           python --version
