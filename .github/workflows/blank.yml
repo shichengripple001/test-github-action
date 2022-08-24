@@ -31,7 +31,7 @@ jobs:
       - name: Run a one-line script
         run: |
           whoami
-
+          touch /__w/abc
       # Runs a single command using the runners shell
       
       - name: choose Python
