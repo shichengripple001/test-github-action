@@ -21,9 +21,9 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       RUNNER_TOOL_CACHE: /tmp
-    container:
-      image: rippleautomation/os:ubuntu22.04_1
-      options: --user 1001
+#     container:
+#       image: rippleautomation/os:ubuntu22.04_1
+#       options: --user 1001
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
