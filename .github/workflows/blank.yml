@@ -30,6 +30,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
 #       - uses: actions/checkout@v3
       - name: Run a one-line script
+        if: github.ref == 'refs/heads/main'
         run: |
           gcc --version
           cat /etc/issue
