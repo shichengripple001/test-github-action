@@ -34,8 +34,6 @@ jobs:
           gcc --version
           cat /etc/issue
           id
-          touch /__t/abc
-          touch /__w/abc
           echo branch:$GITHUB_REF_NAME
       # Runs a single command using the runners shell
       
