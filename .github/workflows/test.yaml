@@ -14,6 +14,12 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          repository: XRPLF/clio
+          path: clio
+          ref: 36ac3215e25f81374d84f8385dc1da894f2f949a
+          fetch-depth: 0
       - name: install Ninja on Linux
         if: startsWith(matrix.site,'production')
         run: |
