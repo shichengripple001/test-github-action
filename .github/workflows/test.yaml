@@ -18,7 +18,7 @@ jobs:
         with:
           repository: XRPLF/clio
           path: clio
-          ref: 36ac3215e25f81374d84f8385dc1da894f2f949a
+          ref: 3f58b3e40176591a29521e82842967a82e8d2aef
           fetch-depth: 0
       - name: install Ninja on Linux
         if: startsWith(matrix.site,'production')
