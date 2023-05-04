@@ -19,7 +19,6 @@ on:
         type: string
       commit:
         description: 'Commit ID'
-        required: true
         type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
