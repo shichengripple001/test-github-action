@@ -12,6 +12,15 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch'
+        required: true
+        type: string
+      commit:
+        description: 'Commit ID'
+        required: true
+        type: string
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -29,6 +38,13 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
 #       - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+        with:
+          repository: XRPLF/clio
+          path: clio
+          ref: ${{ github.event.inputs.commit ||  github.event.inputs.branch  }}
+          fetch-depth: 0
+          
       - name: Run a one-line script
         if: github.ref == 'refs/heads/dev'
         run: |
