@@ -12,6 +12,24 @@ jobs:
             datacenter: "site-b"
     runs-on: ubuntu-latest
     steps:
+      - name: Manual Approval
+        if: github.ref == 'refs/heads/main'  # Limit approval to the main branch
+        uses: "actions/github-script@v5"
+        with:
+          script: |
+            const { data: approvals } = await github.rest.actions.listWorkflowRunApprovals({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId
+            });
+
+            if (approvals.total_count >= 1) {
+              console.log("Approved by at least one person.");
+              process.exit(0);
+            } else {
+              console.log("Waiting for approval...");
+              process.exit(1);
+            }
       - name: checkout
         uses: actions/checkout@v3
       - uses: actions/checkout@v3
