@@ -24,6 +24,15 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 
 jobs:
+  export_variable:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set variable
+      run: echo "MY_VARIABLE=hello" >> $GITHUB_ENV
+
+    - name: Use variable
+      run: echo "Variable value: $MY_VARIABLE"
   # This workflow contains a single job called "build"
   approve:
     # The type of runner that the job will run on
