@@ -32,7 +32,8 @@ jobs:
       run: echo "MY_VARIABLE=hello" >> $GITHUB_ENV
 
     - name: Use variable
-      run: echo "Variable value: $MY_VARIABLE"
+      run: |
+        echo "Variable value: $MY_VARIABLE"
   # This workflow contains a single job called "build"
   approve:
     # The type of runner that the job will run on
