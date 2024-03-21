@@ -6,23 +6,21 @@ on:
       - main
 
 jobs:
-  generate-matrix:
+  job-a:
     runs-on: ubuntu-latest
     outputs:
-      json: ${{ steps.generate-matrix.outputs.json }}
+      json: ${{ steps.get-token.outputs.auth_token }}
     steps:
-      - name: Generate Matrix
-        id: generate-matrix
+      - id: get-token
         run: |
-          # Your script to generate the matrix
-          echo "::set-output name=json::{[\"a\",\"b\"]}"
+          echo "::set-output name=auth_token::{[\"a\",\"b\"]}"
 
-  use-matrix:
-    needs: generate-matrix
+  job-b:
     runs-on: ubuntu-latest
+    needs: job-a
     strategy:
-      matrix: ${{ needs.generate-matrix.outputs.json }}
+      matrix:
+        value: ${{fromJson(needs.job-a.outputs.json)}}
     steps:
-      - name: Print Matrix Values
-        run: |
-          echo "Matrix Value: ${{ matrix.value }}"
+      - run: |
+          echo Current: "${{ matrix.value }}"
