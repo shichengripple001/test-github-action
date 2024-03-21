@@ -1,0 +1,28 @@
+name: Generate Matrix from Output
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+    steps:
+      - name: Generate Matrix
+        id: generate-matrix
+        run: |
+          # Your script to generate the matrix
+          echo "::set-output name=matrix::$(echo -e "foo\nbar\nbaz")"
+
+  use-matrix:
+    needs: generate-matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
+    steps:
+      - name: Print Matrix Values
+        run: |
+          echo "Matrix Value: ${{ matrix.value }}"
