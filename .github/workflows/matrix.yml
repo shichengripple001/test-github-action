@@ -9,19 +9,19 @@ jobs:
   generate-matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.generate-matrix.outputs.matrix }}
+      json: ${{ steps.generate-matrix.outputs.json }}
     steps:
       - name: Generate Matrix
         id: generate-matrix
         run: |
           # Your script to generate the matrix
-          echo "::set-output name=matrix::$(echo -e "foo\nbar\nbaz")"
+          echo "::set-output name=json::{[\"a\",\"b\"]}"
 
   use-matrix:
     needs: generate-matrix
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ needs.generate-matrix.outputs.matrix }}
+      matrix: ${{ needs.generate-matrix.outputs.json }}
     steps:
       - name: Print Matrix Values
         run: |
