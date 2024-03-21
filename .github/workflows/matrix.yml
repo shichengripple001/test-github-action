@@ -1,26 +1,27 @@
 name: Generate Matrix from Output
-
 on:
   push:
     branches:
       - main
 
 jobs:
-  job-a:
+  job1:
     runs-on: ubuntu-latest
     outputs:
-      json: ${{ steps.get-token.outputs.auth_token }}
+      matrix: ${{ steps.matrix.outputs.matrix }}
+      last: ${{ steps.matrix.outputs.last }}
     steps:
-      - id: get-token
+      - id: matrix
         run: |
-          echo "::set-output name=auth_token::{[\"a\",\"b\"]}"
+          echo "::set-output name=matrix::[\"1\",\"2\"]"
+          echo "::set-output name=last::[\"2\"]"
 
-  job-b:
+  job2:
+    needs: [ job1 ]
     runs-on: ubuntu-latest
-    needs: job-a
     strategy:
       matrix:
-        value: ${{fromJson(needs.job-a.outputs.json)}}
+        value: ${{fromJson(needs.job1.outputs.matrix)}}
     steps:
       - run: |
           echo Current: "${{ matrix.value }}"
