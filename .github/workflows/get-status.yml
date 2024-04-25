@@ -25,6 +25,6 @@ jobs:
         run: |
           echo $GITHUB_REPOSITORY
           echo $GITHUB_RUN_ID
-          status=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+          status=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
               https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs)
           echo $status
