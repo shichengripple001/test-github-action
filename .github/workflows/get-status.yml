@@ -23,21 +23,7 @@ jobs:
     steps:
       - name: Check build status
         run: |
-          # Access the overall result of the 'build' job
-          build_result="${{ needs.build.result }}"
-          echo "Build job result: $build_result"
-          
-          # Access specific step conclusion from the 'build' job
-          # You can access the context of a specific step by using `jobs.build.steps['step_id'].conclusion`
-          checkout_step_result="${{ needs.build.steps.checkout.outcome }}"
-          echo "Checkout step result: $checkout_step_result"
-
-          build_step_result="${{ needs.build.steps.build_step.outcome }}"
-          echo "Build step result: $build_step_result"
-          
-          # Perform actions based on step status
-          if [ "$build_result" == "success" ]; then
-            echo "Build job was successful!"
-          else
-            echo "Build job failed!"
-          fi
+          status=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+              https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs \
+              | jq -r --arg job_name "$job" '.jobs[] | select(.name==build)')
+          echo $status
