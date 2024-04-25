@@ -32,7 +32,7 @@ jobs:
           checkout_step_result="${{ needs.build.steps['checkout'].conclusion }}"
           echo "Checkout step result: $checkout_step_result"
 
-          build_step_result="${{ jobs.build.steps['build_step'].conclusion }}"
+          build_step_result="${{ needs.build.steps['build_step'].conclusion }}"
           echo "Build step result: $build_step_result"
           
           # Perform actions based on step status
