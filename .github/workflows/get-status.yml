@@ -26,6 +26,5 @@ jobs:
           echo $GITHUB_REPOSITORY
           echo $GITHUB_RUN_ID
           status=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-              https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs \
-              | jq -r --arg job_name "$job" '.jobs[] | select(.name==build)')
+              https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs)
           echo $status
