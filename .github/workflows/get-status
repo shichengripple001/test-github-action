@@ -1,0 +1,43 @@
+name: Example Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        id: checkout  # Step ID
+
+      - name: Run build
+        run: echo "Building..."
+        id: build_step  # Step ID
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Check build status
+        run: |
+          # Access the overall result of the 'build' job
+          build_result="${{ jobs.build.result }}"
+          echo "Build job result: $build_result"
+          
+          # Access specific step conclusion from the 'build' job
+          # You can access the context of a specific step by using `jobs.build.steps['step_id'].conclusion`
+          checkout_step_result="${{ jobs.build.steps['checkout'].conclusion }}"
+          echo "Checkout step result: $checkout_step_result"
+
+          build_step_result="${{ jobs.build.steps['build_step'].conclusion }}"
+          echo "Build step result: $build_step_result"
+          
+          # Perform actions based on step status
+          if [ "$build_result" == "success" ]; then
+            echo "Build job was successful!"
+          else
+            echo "Build job failed!"
+          fi
