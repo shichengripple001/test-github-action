@@ -33,6 +33,7 @@ jobs:
 
     - name: Use variable
       run: |
+        docker --version
         echo "Variable value: $MY_VARIABLE"
   # This workflow contains a single job called "build"
   approve:
