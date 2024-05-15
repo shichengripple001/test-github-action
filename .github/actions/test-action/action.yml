@@ -8,11 +8,11 @@ inputs:
 outputs:
   greeting:
     description: 'The greeting message'
+    value: ${{ steps.test.outputs.greeting }}
 runs:
   using: 'composite'
   steps:
-    - run: |
-        echo "::set-output name=greeting::Hello, $INPUT_NAME!"
-      shell: bash
-    env:
-      INPUT_NAME: ${{ inputs.name }}
+    - shell: bash
+      id: test
+      run: |
+        echo "::set-output name=greeting::Hello, ${{ inputs.name }}!"
