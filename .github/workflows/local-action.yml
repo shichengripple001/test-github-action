@@ -1,0 +1,19 @@
+name: 'local action Workflow'
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet
+        id: greeting
+        uses: ./.github/actions/my-action
+        with:
+          name: 'GitHub'
+
+      - name: Print Greeting
+        run: echo "The greeting is ${{ steps.greeting.outputs.greeting }}"
