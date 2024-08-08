@@ -16,4 +16,4 @@ jobs:
       - name: test
         uses: ./.github/actions/test-1
         with:
-          name: '["message1","msg2"]'
+          name: '[\"message1\",\"msg2\"]'
