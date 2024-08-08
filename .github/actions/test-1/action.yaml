@@ -11,7 +11,7 @@ runs:
       run: |
         messages=$(echo '${{ inputs.messages }}' | jq -r '.[]')
         message='{"blocks": []}'
-        echo $messages | while read item; do
+        for item in $messages; do
           echo $item
           obj='[{"type":"section","text":{"type":"mrkdwn","text":"'$item'"}}]'
           message=$(echo $message | jq --argjson arr_obj "$obj" '.blocks += $arr_obj')
