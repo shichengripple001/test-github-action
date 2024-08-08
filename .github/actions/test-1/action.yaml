@@ -9,7 +9,7 @@ runs:
     - name: Generate message json
       shell: bash
       run: |
-        messages=$(echo ${{ inputs.messages }} | jq -r '.[]')
+        messages=$(echo '${{ inputs.messages }}' | jq -r '.[]')
         message='{"blocks": []}'
         echo $messages | while read item; do
           obj='[{"type":"section","text":{"type":"mrkdwn","text":"'$item'"}}]'
