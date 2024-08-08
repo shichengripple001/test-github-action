@@ -15,3 +15,4 @@ runs:
           obj='[{"type":"section","text":{"type":"mrkdwn","text":"'$item'"}}]'
           message=$(echo $message | jq --argjson arr_obj "$obj" '.blocks += $arr_obj')
         done
+        echo $message
