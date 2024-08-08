@@ -13,11 +13,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Greet
-        id: greeting
-        uses: ./.github/actions/test-action
+      - name: test
+        uses: ./.github/actions/test-1
         with:
-          name: 'GitHub'
-
-      - name: Print Greeting
-        run: echo "The greeting is ${{ steps.greeting.outputs.greeting }}"
+          name: '["message1","msg2"]'
