@@ -34,7 +34,7 @@ jobs:
           method: jwt
           url: k8s-vault-vaultui-9ef6f0c587-cebb6b5285c15bd8.elb.us-east-1.amazonaws.com:8200
           role: rippled-antithesis
-          secrets: rippled-antithesis/data/test
+          secrets: rippled-antithesis/data/test test
 
       - name: Use secret from Vault
         run: |
