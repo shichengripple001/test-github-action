@@ -9,15 +9,16 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.export_vars.outputs.charts }}
+      charts: ${{ steps.export_vars.outputs.charts }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Export variables
         id: export_vars
         run: |
-          charts=$(cat .github/workflows/config.json | jq   '.explorer_charts' |jq -c "."| sed 's/"/\\"/g' )
-          charts="\"$charts\""
+          charts="["
+          charts+=$(cat .github/workflows/config.json | jq   '.explorer_charts' |jq -c "."| sed 's/"/\\"/g' )
+          charts+="]"
           echo "charts: $charts"
           echo "charts=$charts" >> $GITHUB_OUTPUT
 
