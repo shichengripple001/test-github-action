@@ -18,7 +18,7 @@ jobs:
         run: |
           charts+=$(cat .github/workflows/config.json | jq   '.explorer_charts' |jq -c "."| sed 's/"/\\"/g' )
           echo "charts: $charts"
-          echo "charts=$charts" >> $GITHUB_OUTPUT
+          echo "charts=[\"1\"]" >> $GITHUB_OUTPUT
 
   job2:
     needs: [ job1 ]
