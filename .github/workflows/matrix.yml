@@ -9,18 +9,21 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.matrix.outputs.matrix }}
+      matrix: ${{ steps.export_vars.outputs.charts }}
     steps:
-      - id: matrix
+      - name: Export variables
+        id: export_vars
         run: |
-          echo "matrix=[\"1\",\"2\"]" >> $GITHUB_OUTPUT
+          charts=$(cat .github/workflows/config.json | jq   '.explorer_charts' |jq -c "."| sed 's/"/\\"/g' )
+          echo "charts: $charts"
+          echo "charts=$charts" >> $GITHUB_OUTPUT
 
   job2:
     needs: [ job1 ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        value: ${{fromJson(needs.job1.outputs.matrix)}}
+        chart: ${{fromJson(needs.job1.outputs.charts)}}
     steps:
       - run: |
-          echo Current: "${{ matrix.value }}"
+          echo Current: "${{ matrix.chart }}"
