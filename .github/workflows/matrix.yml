@@ -1,5 +1,6 @@
 name: Generate Matrix from Output
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -9,12 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.matrix.outputs.matrix }}
-      last: ${{ steps.matrix.outputs.last }}
     steps:
       - id: matrix
         run: |
-          echo "::set-output name=matrix::[\"1\",\"2\"]"
-          echo "::set-output name=last::[\"2\"]"
+          echo "matrix=[\"1\",\"2\"]" >> $GITHUB_OUTPUT
 
   job2:
     needs: [ job1 ]
