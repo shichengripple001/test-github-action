@@ -16,8 +16,8 @@ jobs:
       - name: Export variables
         id: export_vars
         run: |
-          charts+=$(cat .github/workflows/config.json | jq   '.explorer_charts' |jq -c "."| sed 's/"/\\"/g' )
-          charts="[\"devnet-explorer\",\"testnet-explorer\"]"
+          charts+=$(cat .github/workflows/config.json | jq   '.explorer_charts' |jq -c "."| sed 's/"/\\"/g' | tr -d '\n' )
+          # charts="[\"devnet-explorer\",\"testnet-explorer\"]"
           echo "charts: $charts"
           echo "charts=${charts}" >> $GITHUB_OUTPUT
 
