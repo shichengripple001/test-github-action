@@ -11,6 +11,8 @@ jobs:
     outputs:
       matrix: ${{ steps.export_vars.outputs.charts }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Export variables
         id: export_vars
         run: |
