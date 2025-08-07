@@ -6,7 +6,7 @@ on:
 
 jobs:
   inspect-launchd:
-    runs-on: macos-latest
+    runs-on: [mac-runner-m1,macos15]
 
     steps:
       - name: Print basic runner info
