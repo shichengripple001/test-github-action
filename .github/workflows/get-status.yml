@@ -19,6 +19,7 @@ jobs:
           ps -ef|grep runner
           sudo cat /Users/runner/Library/LaunchAgents/hca.plist
           sudo cat /opt/hca/start_hca.sh
+          sudo cat /opt/hca/hosted-compute-agent
 
       - name: List all launchd services
         run: |
