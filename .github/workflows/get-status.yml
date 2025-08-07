@@ -16,6 +16,7 @@ jobs:
           echo "Runner user: $(whoami)"
           echo "System version:"
           sw_vers
+          ps -ef|grep runner
 
       - name: List all launchd services
         run: |
