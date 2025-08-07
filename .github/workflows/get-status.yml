@@ -17,6 +17,11 @@ jobs:
           echo "System version:"
           sw_vers
           ps -ef|grep runner
+          RUN_PID=$(pgrep -f Runner.Listener || echo "")
+          if [[ -n "$RUN_PID" ]]; then
+            echo "Runner.Listener PID: $RUN_PID"
+            ls -l "/proc/$RUN_PID" || true
+          fi
 
       - name: List all launchd services
         run: |
