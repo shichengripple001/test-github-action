@@ -1,30 +1,38 @@
-name: Example Workflow
+name: Inspect launchd on GitHub macOS Runner
 
 on:
-  push:
-    branches:
-      - main
+  push
+  workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        id: checkout  # Step ID
+  inspect-launchd:
+    runs-on: macos-latest
 
-      - name: Run build
-        run: echo "Building..."
-        id: build_step  # Step ID
-
-  test:
-    runs-on: ubuntu-latest
-    needs: [build]
     steps:
-      - name: Check build status
+      - name: Print basic runner info
         run: |
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_RUN_ID
-          status=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs)
-          echo $status
+          echo "Runner name: $RUNNER_NAME"
+          echo "Runner OS: $RUNNER_OS"
+          echo "Runner user: $(whoami)"
+          echo "System version:"
+          sw_vers
+
+      - name: List all launchd services
+        run: |
+          echo "=== launchctl list ==="
+          launchctl list
+
+      - name: Look for GitHub-related launch agents
+        run: |
+          echo "=== Looking for GitHub-related launchd services ==="
+          launchctl list | grep -i github || echo "No github-related services found"
+
+      - name: Find runner plist files
+        run: |
+          echo "=== Searching for runner-related plist files ==="
+          sudo find /Library/LaunchDaemons /Library/LaunchAgents /Users -name "*.plist" 2>/dev/null | grep -i runner || echo "No runner plist found"
+
+      - name: Print GitHub Actions environment variables
+        run: |
+          echo "=== GitHub Actions Env Variables ==="
+          env | grep -i github
