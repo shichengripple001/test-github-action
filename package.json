@@ -13,12 +13,12 @@
     "license": "MIT",
     "repository": {
       "type": "git",
-      "url": "git+https://github.com/your-org/your-repo.git"
+      "url": "git+https://github.com/shichengripple001/test-github-action.git"
     },
     "bugs": {
-      "url": "https://github.com/your-org/your-repo/issues"
+      "url": "https://github.com/shichengripple001/test-github-action/issues"
     },
-    "homepage": "https://github.com/your-org/your-repo#readme",
+    "homepage": "https://github.com/shichengripple001/test-github-action#readme",
     "files": [
       "index.js",
       "README.md"
