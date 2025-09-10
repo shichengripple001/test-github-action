@@ -1,6 +1,6 @@
 {
     "name": "my-hello-x",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Tiny example package published by GitHub Actions",
     "main": "index.js",
     "type": "commonjs",
