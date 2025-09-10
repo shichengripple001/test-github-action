@@ -1,6 +1,6 @@
 {
     "name": "@shichengsh001/xrpl",
-    "version": "1.0.5",
+    "version": "4.6.0",
     "description": "Tiny example package published by GitHub Actions",
     "main": "index.js",
     "type": "commonjs",
