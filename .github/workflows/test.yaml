@@ -66,4 +66,4 @@ jobs:
             REVIEWERS="(no required reviewers configured)"
           fi
 
-          echo "reviewers=$REVIEWERS" >> "$GITHUB_OUTPUT"
+          echo "reviewers=$REVIEWERS" 
