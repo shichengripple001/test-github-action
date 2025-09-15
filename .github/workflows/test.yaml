@@ -44,28 +44,26 @@ jobs:
             -H "Authorization: Bearer $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
             "https://api.github.com/repos/$REPO/environments/$ENV_NAME")"
-
-          echo $ENV_JSON
-
+          
           echo "Raw environment JSON fetched."
           echo "$ENV_JSON" | jq -r '.name as $n | "Environment: \($n)"'
-
+          
           REVIEWERS="$(printf '%s' "$ENV_JSON" | jq -r '
             (.protection_rules // [])
-            | map(.reviewers // [])
+            | map(select(.type=="required_reviewers") | .reviewers // [])
             | add // []
             | map(
-                if .type=="User" then (.login // .name)
-                elif .type=="Team" then (.slug // .name)
-                else (.name // .login // "unknown")
+                if .type=="User" then (.reviewer.login)
+                elif .type=="Team" then (.reviewer.slug)
+                else (.reviewer.login // .reviewer.slug // "unknown")
                 end
               )
             | unique
             | join(", ")
           ')"
-
+          
           if [ -z "$REVIEWERS" ] || [ "$REVIEWERS" = "null" ]; then
             REVIEWERS="(no required reviewers configured)"
           fi
-
+          
           echo "reviewers=$REVIEWERS" 
