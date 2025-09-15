@@ -1,45 +1,69 @@
-name: test
-on: [push, pull_request]
-jobs:
+name: Test Environment Reviewers
 
-  test:
-    strategy:
-      matrix:
-        include:
-          - site: "production"
-            datacenter: "site-a"
-          - site: "staging"
-            datacenter: "site-b"
+on:
+  workflow_dispatch:
+    inputs:
+      env_name:
+        description: "Environment name to inspect"
+        required: true
+        default: "official-release"
+      package_name:
+        description: "Package name"
+        required: true
+        default: "xrpl"
+      package_version:
+        description: "Package version"
+        required: true
+        default: "0.0.0-test"
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  show_reviewers:
     runs-on: ubuntu-latest
     steps:
-      - name: Manual Approval
-        if: github.ref == 'refs/heads/main'  # Limit approval to the main branch
-        uses: "actions/github-script@v5"
-        with:
-          script: |
-            const { data: approvals } = await github.rest.actions.listWorkflowRunApprovals({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.runId
-            });
-
-            if (approvals.total_count >= 1) {
-              console.log("Approved by at least one person.");
-              process.exit(0);
-            } else {
-              console.log("Waiting for approval...");
-              process.exit(1);
-            }
-      - name: checkout
-        uses: actions/checkout@v3
-      - uses: actions/checkout@v3
-        with:
-          repository: XRPLF/clio
-          path: clio
-          ref: 3f58b3e40176591a29521e82842967a82e8d2aef
-          fetch-depth: 0
-      - name: install Ninja on Linux
-        if: startsWith(matrix.site,'production')
+      - name: Compute executor
+        id: who
         run: |
-          #sleep 600
-          echo "${{ matrix.site }}"
+          # executor = the person who triggered the pipeline
+          EXECUTOR="${{ github.triggering_actor || github.actor }}"
+          echo "executor=$EXECUTOR" >> "$GITHUB_OUTPUT"
+
+      - name: Fetch environment and extract reviewers
+        id: reviewers
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ENV_NAME: ${{ github.event.inputs.env_name }}
+        run: |
+          set -euo pipefail
+
+          ENV_JSON="$(curl -sSf \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPO/environments/$ENV_NAME")"
+
+          echo "Raw environment JSON fetched."
+          echo "$ENV_JSON" | jq -r '.name as $n | "Environment: \($n)"'
+
+          REVIEWERS="$(printf '%s' "$ENV_JSON" | jq -r '
+            (.protection_rules // [])
+            | map(.reviewers // [])
+            | add // []
+            | map(
+                if .type=="User" then (.login // .name)
+                elif .type=="Team" then (.slug // .name)
+                else (.name // .login // "unknown")
+                end
+              )
+            | unique
+            | join(", ")
+          ')"
+
+          if [ -z "$REVIEWERS" ] || [ "$REVIEWERS" = "null" ]; then
+            REVIEWERS="(no required reviewers configured)"
+          fi
+
+          echo "reviewers=$REVIEWERS" >> "$GITHUB_OUTPUT"
