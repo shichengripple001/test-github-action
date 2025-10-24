@@ -18,33 +18,21 @@ jobs:
       id-token: write   # <-- required for OIDC
       contents: read
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          # Use the lowest supported version of Python for CI/CD
-          python-version: "3.8"
       - name: Load cached .local
         id: cache-poetry
         uses: actions/cache@v4
         with:
           path: /home/runner/.local
-          key: dotlocal-2.1.1
+          key: dotlocal-${{ env.POETRY_VERSION }}
+
       - name: Install poetry
         if: steps.cache-poetry.outputs.cache-hit != 'true'
         run: |
-          set -euo pipefail
-          curl -sSL https://install.python-poetry.org/ | python3 - --version ${{ env.POETRY_VERSION }} || {
-            echo "::group::Poetry installer log"
-            echo "GITHUB_WORKSPACE: ${GITHUB_WORKSPACE}"
-            # Print the most recent installer error log if it exists
-            latest_log=$(ls -1t "${GITHUB_WORKSPACE}"/poetry-installer-error-*.log 2>/dev/null | head -1 || true)
-            if [ -n "${latest_log:-}" ]; then
-              echo "Log: ${latest_log}"
-              sed -n '1,200p' "${latest_log}" || true
-            else
-              echo "No poetry installer error log found under ${GITHUB_WORKSPACE}"
-            fi
-            echo "::endgroup::"
-            exit 1
-          }
-          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          curl -sSL https://install.python-poetry.org/ | python - --version ${{ env.POETRY_VERSION }}
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - name: Install Python + Retrieve Poetry dependencies from cache
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: "poetry"
